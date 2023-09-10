@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SigmaPotato.NativeAPI
+namespace NativeAPI
 {
     internal class UnmarshalDCOM
     {

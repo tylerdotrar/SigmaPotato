@@ -2,10 +2,11 @@
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 
-namespace SigmaPotato.NativeAPI{
+namespace NativeAPI
+{
 
     [ComVisible(true)]
-    public class GodPotatoNetUnmarshalTrigger  {
+    public class SigmaPotatoUnmarshalTrigger  {
         private readonly static Guid IID_IUnknown = new Guid("{00000000-0000-0000-C000-000000000046}");
         private readonly static string binding = "127.0.0.1";
         private readonly static TowerProtocol towerProtocol = TowerProtocol.EPM_PROTOCOL_TCP;
@@ -16,16 +17,16 @@ namespace SigmaPotato.NativeAPI{
         public IBindCtx bindCtx;
         public IMoniker moniker;
 
-        private GodPotatoNetContext GodPotatoNetContext;
+        private SigmaPotatoContext SigmaPotatoContext;
 
 
-        public GodPotatoNetUnmarshalTrigger(GodPotatoNetContext GodPotatoNetContext) {
-            this.GodPotatoNetContext = GodPotatoNetContext;
+        public SigmaPotatoUnmarshalTrigger(SigmaPotatoContext SigmaPotatoContext) {
+            this.SigmaPotatoContext = SigmaPotatoContext;
 
 
-            if (!GodPotatoNetContext.IsStart)
+            if (!SigmaPotatoContext.IsStart)
             {
-                throw new Exception("GodPotatoNetContext was not initialized");
+                throw new Exception("SigmaPotatoContext was not initialized");
             }
 
             pIUnknown = Marshal.GetIUnknownForObject(fakeObject);

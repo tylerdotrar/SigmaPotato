@@ -2,7 +2,9 @@
 using System.IO;
 using System.Text;
 
-namespace SigmaPotato.NativeAPI{
+
+namespace NativeAPI
+{
 
     public enum TowerProtocol : ushort {
         EPM_PROTOCOL_DNET_NSP = 0x04,

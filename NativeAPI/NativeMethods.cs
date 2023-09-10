@@ -5,7 +5,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Security.Principal;
 using System.Text;
 
-namespace SigmaPotato.NativeAPI
+namespace NativeAPI
 {
     public class NativeMethods
     {

