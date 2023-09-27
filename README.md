@@ -64,7 +64,7 @@ and output verbosity for a more intuitive and effective user experience.
 ```
 [+] Added rudimentary AV heuristics bypass by calling an uncommon API.
     o (calling 'VirtualAllocExNuma()' should fail when being analyzed by heuristics engines)
-	o (will still likely get caught by most up-to-date Windows Defender w/ Real-time protection)
+    o (will still likely get caught by most up-to-date Windows Defender w/ Real-time protection)
     
 [+] Cleaned up '--help' message.
     o (minor tweaks and spacing)
@@ -226,9 +226,10 @@ PS C:\Users\JoeSchmoe> .\SigmaPotato.exe --revshell
 ## Examples <a name="examples"></a>
 
 
-Below are two examples of ``SigmaPotato`` usage.
-1. Using ``--revshell`` functionality when using the binary.
-2. Using .NET reflection and a custom SSL PowerShell reverse shell payload (from my [PoorMansArmory](https://github.com/tylerdotrar/PoorMansArmory) repository) that exceeds the 1024 character limit.
+Below are two examples of ``SigmaPotato.exe`` usage.
+
+1. **Simple Example:** Using ``--revshell`` functionality when using the binary.
+2. **Advanced Example:** Using .NET reflection and a custom SSL PowerShell reverse shell payload that exceeds the 1024 character limit (taken from my [PoorMansArmory](https://github.com/tylerdotrar/PoorMansArmory) repository).
 
 **Simple Example:**
 
