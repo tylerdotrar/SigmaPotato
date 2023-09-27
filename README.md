@@ -50,7 +50,7 @@ and output verbosity for a more intuitive and effective user experience.
 ## v1.2.5
 ```
 [+] Streamlined usage when using .NET reflection.
-    o (e.g., can now be executed via '[SigmaPotato]::Main("<command">')
+    o (e.g., can now be executed via "[SigmaPotato]::Main('<command>')")
     
 [+] Improved reverse shell stability and verbosity.
     o (better error correction and now intercepts console data streams)
