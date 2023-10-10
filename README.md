@@ -9,19 +9,19 @@ and output verbosity for a more intuitive and effective user experience.
 
 # Table of Contents <a name="tableContents"></a>
 
-1. [**``Added Functionality over GodPotato``**](#addedFunctionality)
-2. [**``Windows OS Version Compatibility``**](#versionCompatiblity)
-3. [**``General Usage``**](#generalUsage)
-    - [**``Usage from Disk via the Binary``**](#binaryUsage)
-	- [**``Usage from Memory via .NET Reflection``**](#reflectionUsage)
-	- [**``Error Correction``**](#errorCorrection)
-	- [**``Examples``**](#examples)
-4. [**``Credits & Thanks``**](#credits)
-	- [**``BeichenDream``**](#beichenDream)
-	- [**``NukingDragons``**](#nukingDragons)
-5. [**``License``**](#license)
+1. [**Added Functionality over the Original GodPotato**](#addedFunctionality)
+2. [**General Usage**](#generalUsage)
+    - [**Usage from Disk via the Binary**](#binaryUsage)
+	- [**Usage from Memory via .NET Reflection**](#reflectionUsage)
+	- [**Error Correction**](#errorCorrection)
+	- [**Examples**](#examples)
+3. [**Windows OS Version Compatibility**](#versionCompatiblity)
+4. [**Credits & Thanks**](#credits)
+	- [**BeichenDream**](#beichenDream)
+	- [**NukingDragons**](#nukingDragons)
+5. [**License**](#license)
 
-# Added Functionality over the Original <a name="addedFunctionality"></a>
+# Added Functionality over the Original GodPotato <a name="addedFunctionality"></a>
 
 ## v1.0.0
 ```
@@ -79,33 +79,6 @@ and output verbosity for a more intuitive and effective user experience.
     o (save output of the execute process/command to "$env:SigmaOutput")
     o (will likely only be applicable when using reflection) 
 ```
-
-[**``Return to Table of Contents``**](#tableContents)
-
-
-# Windows OS Version Compatibility <a name="versionCompatiblity"></a>
-
-For this project I compiled two different binaries for maximum compatibility.  The default
-**``SigmaPotato.exe``** has been tested and validated on a fresh installation of every Windows
-operating system, from **``Windows 8/8.1 to Windows 11``** *and* **``Windows Server 2012 to Windows
-Server 2019``**. The only *"issue"* with this binary is that .NET reflection does not work with PowerShell Core.
-
-The separate **``SigmaPotatoCore.exe``** was compiled with .NET Framework v2.0 and supports .NET
-reflection on PowerShell Core / .NET Core.  The downside is that this binary then requires
-.NET Framework v3.5 (2.0 + 3.0) to be installed on the target system to work via normal binary 
-execution.  So if you plan to only use reflection, this version would be optimal.
-
-**TL;DR**
-
-| Version | Compiled w/ | Binary Compatibility | Reflection Compatibility |
-| --- | --- | --- | --- |
-| **``SigmaPotato.exe``** | .NET Framework: ``v4.8`` | .NET Framework: ``Any`` | .NET Framework: ``Any (Non-Core)`` |
-| **``SigmaPotatoCore.exe``** | .NET Framework: ``v2.0`` | .NET Framework: ``v3.5`` | .NET Framework: ``Any`` |
-
-| Vulnerable Windows Versions |
-| --- |
-| Windows 8/8.1 - Windows 11 |
-| Windows Server 2012 - Windows 2022 |
 
 [**``Return to Table of Contents``**](#tableContents)
 
@@ -238,6 +211,33 @@ Below are two examples of ``SigmaPotato.exe`` usage.
 **Advanced Example:**
 
 ![Reflection w/ Custom Payload](https://cdn.discordapp.com/attachments/855920119292362802/1156640112030011412/image.png?ex=6515b48c&is=6514630c&hm=86d25d61fc18ddf6b4cb03ee5a3a898fd4ae7904ed5c5e08d3bb0c5c5f1777e4&)
+
+[**``Return to Table of Contents``**](#tableContents)
+
+
+# Windows OS Version Compatibility <a name="versionCompatiblity"></a>
+
+For this project I compiled two different binaries for maximum compatibility.  The default
+**``SigmaPotato.exe``** has been tested and validated on a fresh installation of every Windows
+operating system, from **``Windows 8/8.1 to Windows 11``** *and* **``Windows Server 2012 to Windows
+Server 2019``**. The only *"issue"* with this binary is that .NET reflection does not work with PowerShell Core.
+
+The separate **``SigmaPotatoCore.exe``** was compiled with .NET Framework v2.0 and supports .NET
+reflection on PowerShell Core / .NET Core.  The downside is that this binary then requires
+.NET Framework v3.5 (2.0 + 3.0) to be installed on the target system to work via normal binary 
+execution.  So if you plan to only use reflection, this version would be optimal.
+
+**TL;DR**
+
+| Version | Compiled w/ | Binary Compatibility | Reflection Compatibility |
+| --- | --- | --- | --- |
+| **``SigmaPotato.exe``** | .NET Framework: ``v4.8`` | .NET Framework: ``Any`` | .NET Framework: ``Any (Non-Core)`` |
+| **``SigmaPotatoCore.exe``** | .NET Framework: ``v2.0`` | .NET Framework: ``v3.5`` | .NET Framework: ``Any`` |
+
+| Vulnerable Windows Versions |
+| --- |
+| Windows 8/8.1 - Windows 11 |
+| Windows Server 2012 - Windows 2022 |
 
 [**``Return to Table of Contents``**](#tableContents)
 
