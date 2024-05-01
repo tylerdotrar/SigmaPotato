@@ -4,7 +4,7 @@ aiming to enhance the original work's functionality and user-friendliness.  With
 being PowerShell implementation and visual formatting, the primary focus is on enhancing PowerShell support
 and output verbosity for a more intuitive and effective user experience.
 
-![Banner](https://cdn.discordapp.com/attachments/855920119292362802/1156633429950070905/image.png?ex=6515ae52&is=65145cd2&hm=4d074ce6dc39da8b268619f965c14539c60dcb9e0a1fb01dfcae68bdd1fe372c&)
+![Banner](https://github.com/tylerdotrar/SigmaPotato/assets/69973771/2db4310b-1ceb-4c24-b1f0-963102cc280c)
 
 
 # Table of Contents <a name="toc"></a>
@@ -92,7 +92,8 @@ Run as a user with 'SeImpersonatePrivilege' (or 'SeAssignPrimaryTokenPrivilege')
 
 Checking the help message with ``--help``
 
-![Help](https://cdn.discordapp.com/attachments/855920119292362802/1156634215748730951/image.png?ex=6515af0e&is=65145d8e&hm=7cfacf49ff65f434e74590ed4d2e64433984a1b7970a9b2030fce94e0859ff6e&)
+![Help](https://github.com/tylerdotrar/SigmaPotato/assets/69973771/502c6770-923f-465a-9f24-8577c2141a31)
+
 
 [**Return to Table of Contents**](#toc)
 
@@ -164,7 +165,8 @@ $RevShell = @("--revshell", "<ip_addr>", "<port>")
 I made an active effort to document the majority of errors I came accross.
 Hopefully this effort allows any error you come across to be quickly diagnosed.
 
-**General usage corrections.**
+### General Usage Corrections
+
 ```txt
 PS C:\Users\JoeSchmoe> .\SigmaPotato.exe
 [-] No arguments detected.  Use '--help' for usage information.
@@ -180,18 +182,18 @@ PS C:\Users\JoeSchmoe> .\SigmaPotato.exe --revshell
  o  (Hint: you need to specify an IP address and port)
 ```
 
-**Invalid filename (or filename not in the default path).**
+### Invalid Filename (or Filename not in the Default Path)
 
-![Invalid Filename](https://cdn.discordapp.com/attachments/855920119292362802/1156635021856231484/image.png?ex=6515afce&is=65145e4e&hm=b7385f8dbf4d04fb1d42b1e1d8a8f0e884a032e44ee2aba8ebff6f0eaa834d4a&)
+![Invalid Filename](https://github.com/tylerdotrar/SigmaPotato/assets/69973771/84955f9e-8d5c-4a2a-991b-096e35ac51d4)
 
-**Command likely exceeds the character limit:**
-- Note: this error wouldn't occur if the command was prefaced with "powershell".
+### Command Exceeds the Character Limit
+_(Note: this error wouldn't occur if the command was prefaced with "powershell")_
 
-![Command Too Long](https://cdn.discordapp.com/attachments/855920119292362802/1156635670840877116/image.png?ex=6515b069&is=65145ee9&hm=c766de4648fa96211e5ddf20f96dadfff756e3f7c4ba8868ade12505b8477da0&)
+![Command Too Long](https://github.com/tylerdotrar/SigmaPotato/assets/69973771/42b2ba76-8665-44b8-85cd-c76deebca282)
 
-**User does not have 'SeImpersonatePrivilege' (or 'SeAssignPrimaryTokenPrivilege') user rights:**
+### User does not have 'SeImpersonatePrivilege' (or 'SeAssignPrimaryTokenPrivilege') User Rights
 
-![Invalid Privileges](https://cdn.discordapp.com/attachments/855920119292362802/1156637078499631224/image.png?ex=6515b1b8&is=65146038&hm=58b95348a4114bac583c6c5259a8c143b2c3f4f56bff8d9217a4c592c9d3e962&)
+![Invalid Privileges](https://github.com/tylerdotrar/SigmaPotato/assets/69973771/3a6b4637-2f36-40e3-a97a-f7132501cd54)
 
 [**Return to Table of Contents**](#toc)
 
@@ -202,15 +204,15 @@ PS C:\Users\JoeSchmoe> .\SigmaPotato.exe --revshell
 Below are two examples of ``SigmaPotato.exe`` usage.
 
 1. **Simple Example:** Using ``--revshell`` functionality when using the binary.
-2. **Advanced Example:** Using .NET reflection and a custom SSL PowerShell reverse shell payload that exceeds the 1024 character limit (taken from my [PoorMansArmory](https://github.com/tylerdotrar/PoorMansArmory) repository).
+2. **Advanced Example:** Using .NET reflection and a custom SSL PowerShell reverse shell payload that exceeds the 1024 character limit.  The custom reverse shell was  created using the `Get-RevShell` script from my [PoorMansArmory](https://github.com/tylerdotrar/PoorMansArmory) repository.
 
 **Simple Example:**
 
-![Binary --revshell](https://cdn.discordapp.com/attachments/855920119292362802/1156638053977300993/image.png?ex=6515b2a1&is=65146121&hm=af35c3d2604948f04e3971c39af3d6a54a5dafe4a5abb6679e8d1fa4d34e9daa&)
+![Binary --revshell](https://github.com/tylerdotrar/SigmaPotato/assets/69973771/c1b48322-098a-42f1-8e8e-0441a239128f)
 
 **Advanced Example:**
 
-![Reflection w/ Custom Payload](https://cdn.discordapp.com/attachments/855920119292362802/1156640112030011412/image.png?ex=6515b48c&is=6514630c&hm=86d25d61fc18ddf6b4cb03ee5a3a898fd4ae7904ed5c5e08d3bb0c5c5f1777e4&)
+![Reflection w/ Custom Payload](https://github.com/tylerdotrar/SigmaPotato/assets/69973771/d009d9d0-eb33-47b8-82f9-70e60c1f57c9)
 
 [**Return to Table of Contents**](#toc)
 
